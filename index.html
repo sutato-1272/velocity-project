@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="id" class="cursor-none"> <head>
+<html lang="id" class="cursor-none">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -20,70 +21,48 @@
         /* CORE SETTINGS */
         body { 
             font-family: 'Space Grotesk', sans-serif; 
-            background-color: #eaeaea; 
+            background-color: #ffffff; /* REVISI: Putih Bersih agar kontras tajam */
             color: #000; 
             overflow-x: hidden;
         }
         
         h1, h2, .display-font { font-family: 'Syncopate', sans-serif; text-transform: uppercase; }
 
-        /* --- THE KILLER FEATURE: BLEND MODES --- */
-        /* Teks ini akan berubah warna otomatis tergantung background di belakangnya */
+        /* GRAIN TEXTURE (EFEK MAHAL) */
+        .bg-noise {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 50; opacity: 0.05;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* BLEND MODE MAGIC */
         .blend-text {
             mix-blend-mode: difference;
-            color: white; /* Wajib putih agar efek difference jalan maksimal */
+            color: #fff; 
             z-index: 20;
             pointer-events: none;
         }
 
-        /* --- CUSTOM CURSOR (RAHASIA MAHAL) --- */
-        .cursor-dot,
+        /* CUSTOM CURSOR */
+        .cursor-dot, .cursor-outline {
+            position: fixed; top: 0; left: 0; transform: translate(-50%, -50%); border-radius: 50%; z-index: 9999; pointer-events: none;
+        }
+        .cursor-dot { width: 8px; height: 8px; background-color: black; }
         .cursor-outline {
-            position: fixed;
-            top: 0;
-            left: 0;
-            transform: translate(-50%, -50%);
-            border-radius: 50%;
-            z-index: 9999;
-            pointer-events: none;
+            width: 40px; height: 40px; border: 1px solid black; transition: width 0.2s, height 0.2s, background-color 0.2s;
         }
-        .cursor-dot {
-            width: 8px;
-            height: 8px;
-            background-color: black;
-        }
-        .cursor-outline {
-            width: 40px;
-            height: 40px;
-            border: 1px solid black;
-            transition: width 0.2s, height 0.2s, background-color 0.2s;
-        }
-        
-        /* Hover Effect pada Link/Button */
         body:hover .cursor-outline.hovered {
-            width: 80px;
-            height: 80px;
-            background-color: rgba(0,0,0,0.1);
-            border-color: transparent;
-            mix-blend-mode: difference;
-            background-color: white;
+            width: 80px; height: 80px; background-color: #fff; border-color: transparent; mix-blend-mode: difference;
         }
 
-        /* --- IMAGES --- */
-        .img-reveal {
-            clip-path: inset(0 0 100% 0);
-            transition: clip-path 1.5s cubic-bezier(0.77, 0, 0.175, 1);
-        }
-        .aos-animate .img-reveal {
-            clip-path: inset(0 0 0 0);
-        }
+        /* IMAGES */
+        .img-reveal { clip-path: inset(0 0 100% 0); transition: clip-path 1.5s cubic-bezier(0.77, 0, 0.175, 1); }
+        .aos-animate .img-reveal { clip-path: inset(0 0 0 0); }
 
         /* MARQUEE */
         .marquee-container { overflow: hidden; white-space: nowrap; }
         .marquee-content { display: inline-block; animation: marquee 15s linear infinite; }
         @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
-        /* HIDE CURSOR ON MOBILE */
         @media (max-width: 768px) {
             .cursor-dot, .cursor-outline { display: none; }
             html { cursor: auto; }
@@ -91,6 +70,8 @@
     </style>
 </head>
 <body class="antialiased">
+
+    <div class="bg-noise"></div>
 
     <div class="cursor-dot" data-cursor-dot></div>
     <div class="cursor-outline" data-cursor-outline></div>
@@ -105,7 +86,7 @@
         <div class="text-xl hover-trigger"><i class="fa-solid fa-bars"></i></div>
     </nav>
 
-    <section class="relative h-screen w-full flex items-center justify-center overflow-hidden bg-[#eaeaea]">
+    <section class="relative h-screen w-full flex items-center justify-center overflow-hidden bg-white">
         
         <div class="absolute z-20 text-center w-full pointer-events-none">
             <h1 class="text-[12vw] leading-[0.8] font-bold blend-text" data-aos="zoom-out" data-aos-duration="1500">
@@ -113,9 +94,9 @@
             </h1>
         </div>
 
-        <div class="absolute z-10 w-[80%] md:w-[40%] h-[70%] overflow-hidden grayscale contrast-125 hover:grayscale-0 transition-all duration-700 ease-in-out">
+        <div class="absolute z-10 w-[80%] md:w-[40%] h-[70%] overflow-hidden bg-black">
             <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1000&auto=format&fit=crop" 
-                 class="w-full h-full object-cover scale-110 hover:scale-100 transition-transform duration-1000 img-reveal hover-trigger" 
+                 class="w-full h-full object-cover scale-110 hover:scale-100 transition-transform duration-1000 img-reveal hover-trigger brightness-75 contrast-125" 
                  alt="Fashion Model" data-aos="fade-up">
         </div>
 
@@ -131,7 +112,7 @@
         </div>
     </div>
 
-    <section class="py-24 px-4 md:px-12 bg-[#eaeaea] relative">
+    <section class="py-24 px-4 md:px-12 bg-white relative">
         <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
             
             <div class="md:col-span-4" data-aos="fade-up">
@@ -145,11 +126,11 @@
             </div>
 
             <div class="md:col-span-8 relative">
-                <div class="aspect-[4/5] md:aspect-[16/9] overflow-hidden bg-gray-300">
+                <div class="aspect-[4/5] md:aspect-[16/9] overflow-hidden bg-gray-100">
                     <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?q=80&w=1000&auto=format&fit=crop" 
                          class="w-full h-full object-cover img-reveal hover-trigger hover:scale-105 transition-transform duration-700" alt="Style 1">
                 </div>
-                <div class="absolute -bottom-10 -left-10 w-48 md:w-64 aspect-square overflow-hidden border-4 border-[#eaeaea] shadow-2xl" data-aos="fade-up" data-aos-delay="200">
+                <div class="absolute -bottom-10 -left-10 w-48 md:w-64 aspect-square overflow-hidden border-4 border-white shadow-2xl" data-aos="fade-up" data-aos-delay="200">
                     <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=800&auto=format&fit=crop" 
                          class="w-full h-full object-cover hover-trigger" alt="Style 2">
                 </div>
@@ -158,7 +139,7 @@
         </div>
     </section>
 
-    <section class="py-32 bg-black text-[#eaeaea] flex items-center justify-center relative overflow-hidden">
+    <section class="py-32 bg-black text-white flex items-center justify-center relative overflow-hidden">
         <div class="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]"></div>
         <div class="container mx-auto px-4 text-center z-10">
             <p class="text-xs font-bold tracking-[0.5em] mb-4 text-gray-500">OUR PHILOSOPHY</p>
@@ -169,7 +150,7 @@
         </div>
     </section>
 
-    <section class="py-24 bg-[#eaeaea]">
+    <section class="py-24 bg-white">
         <div class="max-w-7xl mx-auto px-6">
             <div class="flex justify-between items-end mb-12">
                 <h2 class="text-4xl font-bold">LATEST <span class="italic font-serif font-light">DROPS</span></h2>
@@ -181,9 +162,9 @@
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div class="group cursor-none" data-aos="fade-up" data-aos-delay="0">
-                    <div class="relative overflow-hidden mb-4 aspect-[3/4]">
+                    <div class="relative overflow-hidden mb-4 aspect-[3/4] bg-gray-100">
                         <img src="https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?q=80&w=800" 
-                             class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 hover-trigger" alt="Item 1">
+                             class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 hover-trigger" alt="Urban Coat">
                         <div class="absolute top-0 left-0 bg-black text-white text-xs font-bold px-3 py-2">SOLD OUT</div>
                     </div>
                     <h3 class="text-xl font-bold">URBAN COAT V1</h3>
@@ -191,18 +172,18 @@
                 </div>
 
                 <div class="group cursor-none" data-aos="fade-up" data-aos-delay="100">
-                    <div class="relative overflow-hidden mb-4 aspect-[3/4]">
-                        <img src="https://images.unsplash.com/photo-1605763240004-7d93b172d7cd?q=80&w=800" 
-                             class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 hover-trigger" alt="Item 2">
+                    <div class="relative overflow-hidden mb-4 aspect-[3/4] bg-gray-100">
+                        <img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=800&auto=format&fit=crop" 
+                             class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 hover-trigger grayscale group-hover:grayscale-0" alt="Noir Hoodie">
                     </div>
                     <h3 class="text-xl font-bold">NOIR HOODIE</h3>
                     <p class="text-gray-500 text-sm">$ 120.00</p>
                 </div>
 
                 <div class="group cursor-none" data-aos="fade-up" data-aos-delay="200">
-                    <div class="relative overflow-hidden mb-4 aspect-[3/4]">
+                    <div class="relative overflow-hidden mb-4 aspect-[3/4] bg-gray-100">
                         <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=800" 
-                             class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 hover-trigger" alt="Item 3">
+                             class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 hover-trigger" alt="Utility Vest">
                         <div class="absolute bottom-0 right-0 bg-black text-white text-xs font-bold px-3 py-2">NEW</div>
                     </div>
                     <h3 class="text-xl font-bold">UTILITY VEST</h3>
@@ -236,14 +217,8 @@
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        // INIT ANIMATION
-        AOS.init({
-            duration: 1200,
-            once: true,
-            easing: 'ease-out-expo'
-        });
+        AOS.init({ duration: 1200, once: true, easing: 'ease-out-expo' });
 
-        // CUSTOM CURSOR LOGIC (JANTUNGNYA PROJECT INI)
         const cursorDot = document.querySelector('[data-cursor-dot]');
         const cursorOutline = document.querySelector('[data-cursor-outline]');
         const hoverTriggers = document.querySelectorAll('.hover-trigger');
@@ -251,31 +226,21 @@
         window.addEventListener("mousemove", function (e) {
             const posX = e.clientX;
             const posY = e.clientY;
-
-            // Dot moves instantly
             cursorDot.style.left = `${posX}px`;
             cursorDot.style.top = `${posY}px`;
-
-            // Outline moves with delay (smooth effect)
-            cursorOutline.animate({
-                left: `${posX}px`,
-                top: `${posY}px`
-            }, { duration: 500, fill: "forwards" });
+            cursorOutline.animate({ left: `${posX}px`, top: `${posY}px` }, { duration: 500, fill: "forwards" });
         });
 
-        // Cursor Hover Effect logic
         hoverTriggers.forEach(trigger => {
             trigger.addEventListener('mouseenter', () => {
                 cursorOutline.classList.add('hovered');
-                cursorDot.style.opacity = '0'; // Hide dot when hovering
+                cursorDot.style.opacity = '0';
             });
             trigger.addEventListener('mouseleave', () => {
                 cursorOutline.classList.remove('hovered');
                 cursorDot.style.opacity = '1';
             });
         });
-
-        console.log("VELOCITY SYSTEM ONLINE.");
     </script>
 </body>
 </html>
